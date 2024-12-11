@@ -6,7 +6,6 @@ X = data['X']
 y = data['y'].ravel()
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
-# use min-max Normalization to have it in [0-1]
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler()
 X_train = scaler.fit_transform(X_train)

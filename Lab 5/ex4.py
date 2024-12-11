@@ -29,8 +29,6 @@ X_test_noisy = X_test + noise_factor * tf.random.normal(shape=X_test.shape)
 X_train_noisy = tf.clip_by_value(X_train_noisy, clip_value_min=0, clip_value_max=1)
 X_test_noisy = tf.clip_by_value(X_test_noisy, clip_value_min=0, clip_value_max=1)
 
-#Design a Convolutional Autoencoder class that uses the keras.Sequential model to create encoder and decoder submodels that contain keras.layers.Conv2D and keras.layers.Conv2DTranspose layers. The encoder will contain: • 1Conv2Dlayer with 8 (3 X 3) filters, relu activation, strides=2 and padding- ’same’ • 1 Conv2D layer with 4 (3 X 3) filters and the rest of params as above The decoder will consist of: • 1 Conv2DTranspose layer with the same parameters as the last layer of the encoder • 1 Conv2DTranspose layer with the same parameters as the first layer of the encoder • 1 Conv2D layer with 1 filter with sigmoid activation that will reconstruct the original image
-
 class ConvAutoencoder(Model):
     def __init__(self):
         super(ConvAutoencoder, self).__init__()
@@ -51,8 +49,6 @@ class ConvAutoencoder(Model):
         decoded = self.decoder(encoded)
         return decoded
     
-#Compile your model using adam optimizer and mse loss and fit it with your training data using 10 epochs and a batch size of 64 (use the test data as validation data in the trainig process). Use only the original train data for training. Compute the reconstruction loss for the training data and a threshold (that will be the mean of the reconstruction errors + their standard deviation). Based on the threshold and the obtained reconstruction errors classify both the original test images and the ones that have the added noise (and compute the corresponding accuracy).
-
 autoencoder = ConvAutoencoder()
 autoencoder.compile(optimizer='adam', loss='mse')
 
@@ -73,14 +69,12 @@ reconstruction_error_test = np.mean(np.square(X_test - reconstruction_test), axi
 y_train_pred = (reconstruction_error_train > threshold).astype(int)
 y_test_pred = (reconstruction_error_test > threshold).astype(int)
 
-#Balanced accuracy
 from sklearn.metrics import balanced_accuracy_score
 train_accuracy = balanced_accuracy_score(y_train, y_train_pred)
 test_accuracy = balanced_accuracy_score(y_test, y_test_pred)
 
 print(f"Autoencoder Balanced Accuracy - Train: {train_accuracy}, Test: {test_accuracy}")
 
-#4. Plot in the same figure, on four rows, 5 test images: on the first rowthe original ones, on the second one- the images with the added noise, on the third, the reconstructed images obtained from the original ones and on the last row the reconstructed images obtained from the images with added noise.
 plt.figure(figsize=(20, 10))
 
 for i in range(5):
@@ -102,7 +96,6 @@ for i in range(5):
     plt.axis('off')
 plt.show()
 
-# Modify the training stage in order to obtain a Denoising Autoencoder and print the same figure again.
 
 denoising_autoencoder = ConvAutoencoder()
 denoising_autoencoder.compile(optimizer='adam', loss='mse')
